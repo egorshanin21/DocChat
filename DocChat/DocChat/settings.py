@@ -42,9 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'chat',
     'crispy_forms',
-    'crispy_bootstrap5'
+    'crispy_bootstrap5',
+    'chat',
+    'users',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
