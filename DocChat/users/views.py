@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, get_user_model
+from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
@@ -67,7 +68,7 @@ def register(request):
 
     return render(
         request=request,
-        template_name="registration/register.html",
+        template_name="users/register.html",
         context={"form": form}
         )
 
@@ -96,9 +97,15 @@ def custom_login(request):
 
     return render(
         request=request,
-        template_name="registration/login.html",
+        template_name="users/login.html",
         context={"form": form}
         )
+
+@login_required
+def custom_logout(request):
+    logout(request)
+    messages.info(request, "Logged out successfully!")
+    return redirect("homepage")
 
 def password_change(request):
     user = request.user
@@ -113,13 +120,13 @@ def password_change(request):
                 messages.error(request, error)
 
     form = SetPasswordForm(user)
-    return render(request, 'password_reset_confirm.html', {'form': form})
+    return render(request, 'users/password_reset_confirm.html', {'form': form})
 
 def password_reset_request(request):
     form = PasswordResetForm()
     return render(
         request=request, 
-        template_name="password_reset.html", 
+        template_name="users/password_reset.html", 
         context={"form": form}
         )
 
@@ -167,7 +174,7 @@ def password_reset_request(request):
     form = PasswordResetForm()
     return render(
         request=request, 
-        template_name="password_reset.html", 
+        template_name="users/password_reset.html", 
         context={"form": form}
         )
 
@@ -191,7 +198,7 @@ def passwordResetConfirm(request, uidb64, token):
                     messages.error(request, error)
 
         form = SetPasswordForm(user)
-        return render(request, 'password_reset_confirm.html', {'form': form})
+        return render(request, 'users/password_reset_confirm.html', {'form': form})
     else:
         messages.error(request, "Link is expired")
 
