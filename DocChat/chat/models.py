@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import User
 
+
 class Chat(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chats')
     title = models.TextField()
@@ -9,12 +10,15 @@ class Chat(models.Model):
 class Message(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='messages')
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField()
+    message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
-class MessageFile(models.Model):
-    message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='files')
+class UserFile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name='userfile')
     file = models.FileField(upload_to='message_files/')
-    content = models.TextField()
+    content = models.TextField(null=True, blank=True)
 
+    def __str__(self):
+        return f"{self.user.username}'s"
