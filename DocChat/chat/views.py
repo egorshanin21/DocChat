@@ -137,22 +137,23 @@ def send_message(request, chat_id=None):
         if form.is_valid():
             sender = request.user
             message_text = request.POST.get('message')
-
             if chat_id:
+                print(chat_id)
                 chat = get_object_or_404(Chat, id=chat_id, user=request.user)
             else:
                 chat = Chat.objects.create(user=request.user,
                                            title=message_text)
             message = Message.objects.create(chat=chat, sender=sender,
                                              message=message_text)
-            return JsonResponse({'chat_id': chat.id, 'message_id': message.id})
+            return redirect('send_message_id', chat_id=chat_id)
+
     else:
         if chat_id:
             messages = get_messages(chat_id, request.user)
         else:
             messages = []
         form = SendMessageForm()
-        return render(request, template_name, {'form': form, 'message': messages})
+        return render(request, template_name, {'chat_id': chat_id, 'form': form, 'message': messages})
 
 
 @login_required
@@ -167,7 +168,7 @@ def get_messages(chat_id, user):
     chat = get_object_or_404(Chat, id=chat_id, user=user)
     messages = Message.objects.filter(chat=chat)
     message_list = [{'sender': message.sender.username, 'message': message.message, 'timestamp': message.timestamp} for message in messages]
-    return {'messages': message_list}
+    return message_list
 
 
 
