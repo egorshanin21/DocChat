@@ -1,0 +1,16 @@
+{% extends 'chat/base.html' %}
+{% block title %}Chat List{% endblock %}
+{% block content %}
+    <h2>Chat List</h2>
+    {% if chats %}
+        <ul>
+            {% for chat in chats %}
+                <li>
+                    <a href="{% url 'send_message_id' chat.id %}">{{ chat.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No chats available.</p>
+    {% endif %}
+{% endblock %}

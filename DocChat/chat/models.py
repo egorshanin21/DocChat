@@ -4,7 +4,7 @@ from users.models import User
 
 class Chat(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chats')
-    title = models.TextField()
+    title = models.TextField(null=True, blank=True)
 
 
 class Message(models.Model):
@@ -17,6 +17,7 @@ class Message(models.Model):
 class UserFile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              related_name='userfile')
+    title = models.CharField(max_length=200)
     file = models.FileField(upload_to='message_files/')
     content = models.TextField(null=True, blank=True)
 
