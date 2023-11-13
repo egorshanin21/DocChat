@@ -1,19 +1,112 @@
+{#{% extends 'chat/base.html' %}#}
+{#{% block title %}Home Page{% endblock %}#}
+{#{% block content %}#}
+{#    <h2>Chat</h2>#}
+{#    {% for item in message %}#}
+{#        <h3>{{ item.sender }}<br></h3>{{ item.message }}<br>#}
+{#    {% endfor %}#}
+{#     {% if chat_id %}#}
+{#        <form method="post" enctype="multipart/form-data" action="{% url 'send_message_id' chat_id=chat_id %}">#}
+{#     {% else %}#}
+{#        <form method="post" enctype="multipart/form-data" action="{% url 'send_message' %}">#}
+{#     {% endif %}#}
+{#            {% csrf_token %}#}
+{#            {{ form.as_p }}#}
+{#            <button type="submit">send</button>#}
+{#    </form>#}
+{#{% endblock %}#}
+
 {% extends 'chat/base.html' %}
-{% block title %}Home Page{% endblock %}
+{% block title %}Chat{% endblock %}
 {% block content %}
-    <h2>Chat</h2>
-    {% for item in message %}
-        {{ item.message }}<br>
-    {% endfor %}
-     {% if chat_id %}
-        <form method="post" enctype="multipart/form-data" action="{% url 'send_message_id' chat_id=chat_id %}">
-     {% else %}
-        <form method="post" enctype="multipart/form-data" action="{% url 'send_message' %}">
-     {% endif %}
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">send</button>
-    </form>
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .message-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            max-width: 1000px;
+            margin: 20px 0;
+            width: 50%;
+            word-wrap: break-word;
+            overflow-y: auto;
+            max-height: 70vh;
+            border-radius: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        .form-container {
+            text-align: center;
+            margin-top: 20px;
+            position: absolute;
+            bottom: 170px;
+            width: 100%;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        textarea {
+            height: 40px;
+            resize: vertical;
+            margin-top: 10px;
+            width: 900px;
+            overflow-y: auto;
+            border-radius: 10px;
+        }
+
+        button {
+            margin-top: 10px;
+            width: 100px;
+            border-radius: 10px;
+        }
+    </style>
+    <h2>Chats {{ request.user }}</h2>
+    <div class="chat-container">
+        <div class="message-box">
+            {% for item in message %}
+                <div class="message">
+                    <h3>{{ item.sender }}<br></h3>{{ item.message }}<br>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="form-container">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <textarea name="message" id="id_message" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
 
 
