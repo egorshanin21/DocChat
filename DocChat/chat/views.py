@@ -151,6 +151,8 @@ def send_message(request, chat_id=None):
             return redirect('send_message_id', chat_id=chat_id)
 
     else:
+        chats = Chat.objects.filter(user=request.user)
+        chat_list = [{'id': chat.id, 'title': chat.title} for chat in chats]
         if chat_id:
             messages = get_messages(chat_id, request.user)
         else:
@@ -158,7 +160,7 @@ def send_message(request, chat_id=None):
         form = SendMessageForm()
         return render(request, template_name,
                       {'chat_id': chat_id, 'form': form,
-                       'message': messages})
+                       'message': messages, 'chats': chat_list})
 
 
 @login_required

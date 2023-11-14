@@ -7,7 +7,7 @@
         }
 
         .form-header {
-
+             margin-top: 5px;
         }
 
         .chat-container {
@@ -19,17 +19,19 @@
 
         .chats-container {
             border: 1px solid #ccc;
-            padding: 10px;
-            width: 400px; /* Ширина контейнера для отображения чатов */
-            height: 830px; /* Высота контейнера для отображения чатов */
+            padding: 20px;
+            max-width: 400px; /* Ширина контейнера для отображения чатов */
+            max-height: 80vh; /* Высота контейнера для отображения чатов */
             display: flex;
+            width: 50%;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
             border-radius: 10px;
             margin-right: 68px; /* Добавлен отступ справа для разделения контейнеров */
-            margin-top:20px;
-            padding-bottom: 780px;
+            overflow-y: auto;
+            word-wrap: break-word;
+            margin-top: 20px;
+
+
         }
 
         .message-box {
@@ -82,7 +84,11 @@
     <div class="chat-container">
         <div class="chats-container">
             <h2 class="form-header">Chat {{ request.user }}</h2>
-            {# Здесь вы можете добавить код для отображения чатов пользователя #}
+            {% for item in chats %}
+                <div class="message">
+                     <a href="{% url 'send_message_id' chat_id=item.id %}">{{ item.title }}</a><br>
+                </div>
+            {% endfor %}
         </div>
 
         <div class="message-box">
