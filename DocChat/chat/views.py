@@ -29,6 +29,7 @@ load_dotenv()
 def homepage(request):
     return render(request, 'chat/home.html')
 
+
 def get_file_text(file):
     text = None
     if file:
@@ -63,7 +64,6 @@ def get_text_fragments(text):
 
 def get_vector(text_fragments):
     api_key = os.getenv("OPENAI_API_KEY")
-    print(api_key)
     investments = OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=api_key)
     vector = FAISS.from_texts(text_fragments, investments)
     return vector
@@ -85,14 +85,10 @@ def get_conversation_fragments(vector):
 def upload_file(request):
     template_name = 'chat/upload_file.html'
     user = request.user
-    print(user)
-    print(request.method)
 
     if request.method == 'POST':
-        print('1122')
         form = UserFileForm(request.POST, request.FILES)
         if form.is_valid():
-            print(request.FILES)
             pdf_document = request.FILES['file']
 
             _, file_extension = os.path.splitext(pdf_document.name)
@@ -101,11 +97,10 @@ def upload_file(request):
                 return JsonResponse(
                     {'error': 'Only PDF, TXT, DOCX, PPTX files'}, status=400)
 
-            if pdf_document.size > 50 * 1024 * 1024:  # Розмір файлу понад 50 МБ
+            if pdf_document.size > 50 * 1024 * 1024:
                 return JsonResponse({'error': "File size exceeds 50 MB."},
                                     status=400)
 
-            # Check if a file with the same name already exists for this user
             if UserFile.objects.filter(user=user,
                                        title=pdf_document.name).exists():
                 return JsonResponse(
@@ -139,7 +134,9 @@ def send_message(request, chat_id=None):
             sender = request.user
             message_text = request.POST.get('message')
             documents_content = UserFile.objects.filter(user=request.user).values_list('content', flat=True)
-            text_chunks = get_text_fragments(documents_content[0])
+            text_chunks = []
+            for doc in documents_content:
+                text_chunks.extend(get_text_fragments(doc))
 
             knowledge_base = get_vector(text_chunks)
             conversation_chain = get_conversation_fragments(knowledge_base)
@@ -149,7 +146,6 @@ def send_message(request, chat_id=None):
 
             chat_response = response["answer"]
             print(chat_response)
-
 
             if chat_id:
                 print(chat_id)
