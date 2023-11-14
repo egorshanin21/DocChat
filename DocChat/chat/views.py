@@ -29,7 +29,6 @@ load_dotenv()
 def homepage(request):
     return render(request, 'chat/home.html')
 
-
 def get_file_text(file):
     text = None
     if file:
@@ -56,29 +55,30 @@ def get_file_text(file):
     return text
 
 
-# def get_text_fragments(text):
-#     text_separator = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
-#     fragments = text_separator.split_text(text)
-#     return fragments
-#
-#
-# def get_vector(text_fragments):
-#     api_key = os.getenv("OPENAI_API_KEY")
-#     investments = OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=api_key)
-#     vector = FAISS.from_texts(text_fragments, investments)
-#     return vector
-#
-#
-# def get_conversation_fragments(vector):
-#     bot_gpt = ChatOpenAI(model="gpt-3.5-turbo")
-#     memory = ConversationBufferMemory(memory_key='chat_history',
-#                                       return_messages=True)
-#     conversation_fragments = ConversationalRetrievalChain.from_llm(
-#         llm=bot_gpt,
-#         retriever=vector.as_retriever(),
-#         memory=memory
-#     )
-#     return conversation_fragments
+def get_text_fragments(text):
+    text_separator = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+    fragments = text_separator.split_text(text)
+    return fragments
+
+
+def get_vector(text_fragments):
+    api_key = os.getenv("OPENAI_API_KEY")
+    print(api_key)
+    investments = OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=api_key)
+    vector = FAISS.from_texts(text_fragments, investments)
+    return vector
+
+
+def get_conversation_fragments(vector):
+    bot_gpt = ChatOpenAI(model="gpt-3.5-turbo")
+    memory = ConversationBufferMemory(memory_key='chat_history',
+                                      return_messages=True)
+    conversation_fragments = ConversationalRetrievalChain.from_llm(
+        llm=bot_gpt,
+        retriever=vector.as_retriever(),
+        memory=memory
+    )
+    return conversation_fragments
 
 
 @login_required
@@ -138,6 +138,19 @@ def send_message(request, chat_id=None):
         if form.is_valid():
             sender = request.user
             message_text = request.POST.get('message')
+            documents_content = UserFile.objects.filter(user=request.user).values_list('content', flat=True)
+            text_chunks = get_text_fragments(documents_content[0])
+
+            knowledge_base = get_vector(text_chunks)
+            conversation_chain = get_conversation_fragments(knowledge_base)
+
+            with get_openai_callback() as cb:
+                response = conversation_chain({'question': message_text})
+
+            chat_response = response["answer"]
+            print(chat_response)
+
+
             if chat_id:
                 print(chat_id)
                 chat = get_object_or_404(Chat, id=chat_id, user=request.user)
@@ -148,13 +161,15 @@ def send_message(request, chat_id=None):
                 chat_id = chat.id
             Message.objects.create(chat=chat, sender=sender,
                                              message=message_text)
+            Message.objects.create(chat=chat, sender=sender,
+                                   message=chat_response, answer=True)
             return redirect('send_message_id', chat_id=chat_id)
 
     else:
         chats = Chat.objects.filter(user=request.user)
         chat_list = [{'id': chat.id, 'title': chat.title} for chat in chats]
         if chat_id:
-            messages = get_messages(chat_id, request.user)
+            messages = get_messages(chat_id)
         else:
             messages = []
         form = SendMessageForm()
@@ -171,10 +186,10 @@ def get_chats(request):
     return render(request, template_name, {'chats': chat_list})
 
 
-def get_messages(chat_id, user):
-    chat = get_object_or_404(Chat, id=chat_id, user=user)
+def get_messages(chat_id):
+    chat = get_object_or_404(Chat, id=chat_id)
     messages = Message.objects.filter(chat=chat)
     message_list = [
         {'sender': message.sender.username, 'message': message.message,
-         'timestamp': message.timestamp} for message in messages]
+         'timestamp': message.timestamp, 'answer': message.answer} for message in messages]
     return message_list

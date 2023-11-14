@@ -83,7 +83,8 @@
 
     <div class="chat-container">
         <div class="chats-container">
-            <h2 class="form-header">Chat {{ request.user }}</h2>
+            <a href="{% url 'send_message' %}" class="button">Create chat</a>
+            <h2 class="form-header">Chats {{ request.user }} </h2>
             {% for item in chats %}
                 <div class="message">
                      <a href="{% url 'send_message_id' chat_id=item.id %}">{{ item.title }}</a><br>
@@ -94,7 +95,12 @@
         <div class="message-box">
             {% for item in message %}
                 <div class="message">
-                    <h3>{{ item.sender }}<br></h3>{{ item.message }}<br>
+                {% if item.answer %}
+                     <h3>Chat<br></h3>{{ item.message }}<br>
+
+                {% else %}
+                   <h3>{{ item.sender }}<br></h3>{{ item.message }}<br>
+                {% endif %}
                 </div>
             {% endfor %}
         </div>
