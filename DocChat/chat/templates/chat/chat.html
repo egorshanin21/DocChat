@@ -63,10 +63,11 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
+            margin-bottom: -15px;
         }
 
         textarea {
-            height: 40px;
+            height: 45px;
             resize: vertical;
             margin-top: 10px;
             width: 900px;
@@ -76,8 +77,10 @@
 
         button {
             margin-top: 10px;
-            width: 100px;
+            width: 150px;
             border-radius: 10px;
+            background-color: #05f50f;
+            color: #070707;
         }
     </style>
 
@@ -97,7 +100,6 @@
                 <div class="message">
                 {% if item.answer %}
                      <h3>Chat<br></h3>{{ item.message }}<br>
-
                 {% else %}
                    <h3>{{ item.sender }}<br></h3>{{ item.message }}<br>
                 {% endif %}

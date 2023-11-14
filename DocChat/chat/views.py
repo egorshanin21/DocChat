@@ -120,7 +120,6 @@ def upload_file(request):
 
 def create_chat(request):
     template_name = 'chat/chat.html'
-    # return render(request, template_name)
     return redirect(
         'homepage')
 
