@@ -5,15 +5,33 @@
 {#    {% for item in message %}#}
 {#        <h3>{{ item.sender }}<br></h3>{{ item.message }}<br>#}
 {#    {% endfor %}#}
-{#     {% if chat_id %}#}
-{#        <form method="post" enctype="multipart/form-data" action="{% url 'send_message_id' chat_id=chat_id %}">#}
-{#     {% else %}#}
-{#        <form method="post" enctype="multipart/form-data" action="{% url 'send_message' %}">#}
-{#     {% endif %}#}
-{#            {% csrf_token %}#}
-{#            {{ form.as_p }}#}
-{#            <button type="submit">send</button>#}
+{#    <form id="messageForm" method="post" enctype="multipart/form-data" action="">#}
+{#        {% csrf_token %}#}
+{#        {{ form.as_p }}#}
+{#        <button type="button" onclick="sendMessage()">Send</button>#}
 {#    </form>#}
+{##}
+{#    <script>#}
+{#    console.log("chat_id:", "{{ chat_id }}");#}
+{#        function sendMessage() {#}
+{#            var form = document.getElementById("messageForm");#}
+{#            var chatIdInput = document.createElement("input");#}
+{#            chatIdInput.setAttribute("type", "hidden");#}
+{#            chatIdInput.setAttribute("name", "chat_id");#}
+{#            chatIdInput.setAttribute("value", "{{ chat_id }}");#}
+{#            form.appendChild(chatIdInput);#}
+{##}
+{#            var actionUrl;#}
+{#            if ("{{ chat_id }}" !== "None") {#}
+{#                actionUrl = "/send_message/{{ chat_id }}/";#}
+{#            } else {#}
+{#                actionUrl = "/send_message/";#}
+{#            }#}
+{##}
+{#            form.action = actionUrl;#}
+{#            form.submit();#}
+{#        }#}
+{#    </script>#}
 {#{% endblock %}#}
 
 {% extends 'chat/base.html' %}
@@ -79,7 +97,7 @@
             border-radius: 10px;
         }
     </style>
-    <h2>Chats {{ request.user }}</h2>
+
     <div class="chat-container">
         <div class="message-box">
             {% for item in message %}
@@ -90,14 +108,37 @@
         </div>
 
         <div class="form-container">
-            <form method="post" enctype="multipart/form-data">
+            <form id="messageForm" method="post" enctype="multipart/form-data" action="">
                 {% csrf_token %}
-                <textarea name="message" id="id_message" required></textarea>
-                <button type="submit">Send</button>
+                {{ form.as_p }}
+                <button type="button" onclick="sendMessage()">Send</button>
             </form>
         </div>
     </div>
+
+    <script>
+        console.log("chat_id:", "{{ chat_id }}");
+        function sendMessage() {
+            var form = document.getElementById("messageForm");
+            var chatIdInput = document.createElement("input");
+            chatIdInput.setAttribute("type", "hidden");
+            chatIdInput.setAttribute("name", "chat_id");
+            chatIdInput.setAttribute("value", "{{ chat_id }}");
+            form.appendChild(chatIdInput);
+
+            var actionUrl;
+            if ("{{ chat_id }}" !== "None") {
+                actionUrl = "/send_message/{{ chat_id }}/";
+            } else {
+                actionUrl = "/send_message/";
+            }
+
+            form.action = actionUrl;
+            form.submit();
+        }
+    </script>
 {% endblock %}
+
 
 
 
