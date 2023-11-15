@@ -1,0 +1,14 @@
+SECRET_KEY=your_django_secret_key
+
+DATABASE_NAME=your_database_name
+DATABASE_USER=your_database_user
+DATABASE_PASSWORD=your_database_password
+DATABASE_HOST=your_database_host
+DATABASE_PORT=5432
+
+EMAIL_HOST=your_email_host
+EMAIL_PORT=your_email_port
+EMAIL_HOST_USER=your_email
+EMAIL_HOST_PASSWORD=your_email_password
+
+OPENAI_API_KEY=your_openai_api_secret_key

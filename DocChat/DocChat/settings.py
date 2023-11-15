@@ -96,7 +96,15 @@ DATABASES = {
         "PORT": env("DATABASE_PORT"),
     }
 }
+# YouYou can use a local database by uncommenting the DATABASES code below and commenting out the DATABASES code above.
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'mydatabase', # This is where you put the name of the db file.
+#                  # If one doesn't exist, it will be created at migration time.
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
