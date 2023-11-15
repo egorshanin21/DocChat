@@ -1,16 +1,20 @@
 {% extends 'chat/base.html' %}
+{% load static %}
 {% block title %}Sign up{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+</head>
 <div class="content-section">
     <form method="post">
     {% csrf_token %}
     <fieldset class="form-group">
-        <legend class="border-bottom mb-4">Create user</legend>
         {{ form|crispy }}
     </fieldset>
     <p>Have an account? Login <a href="/login">here</a>!</p>
     <button type="submit" class="btn btn-success">Register</button>
+        <a href="/" class="btn btn-secondary btn-block">Back</a>
     </form>
 </div>
 {% endblock %}

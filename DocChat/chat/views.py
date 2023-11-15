@@ -178,7 +178,9 @@ def get_chats(request):
     template_name = 'chat/chat_list.html'
     chats = Chat.objects.filter(user=request.user)
     chat_list = [{'id': chat.id, 'title': chat.title} for chat in chats]
-    return render(request, template_name, {'chats': chat_list})
+    docs = UserFile.objects.filter(user=request.user)
+    docs_list = [{'id': doc.id, 'title': doc.title} for doc in docs]
+    return render(request, template_name, {'chats': chat_list, 'docs': docs_list})
 
 
 def get_messages(chat_id):
