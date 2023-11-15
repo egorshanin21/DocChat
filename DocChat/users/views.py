@@ -8,7 +8,9 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.db.models.query_utils import Q
-
+from django.views.generic import DeleteView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
 
 from .forms import UserRegistrationForm, UserLoginForm, SetPasswordForm, PasswordResetForm
 from .tokens import account_activation_token
@@ -204,3 +206,10 @@ def passwordResetConfirm(request, uidb64, token):
 
     messages.error(request, 'Something went wrong, redirecting back to Homepage')
     return redirect("homepage")
+
+
+class DeleteUser(SuccessMessageMixin, DeleteView):
+    model = get_user_model()
+    template_name = 'users/delete_user_confirm.html'
+    success_message = 'User jas been deleted'
+    success_url = reverse_lazy('homepage')
