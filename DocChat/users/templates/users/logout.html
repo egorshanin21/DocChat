@@ -1,5 +1,18 @@
-{% extends "chat/base.html" %}
+{% extends 'chat/base.html' %}
+{% load static %}
+{% block title %}Login{% endblock %}
+{% load crispy_forms_tags %}
 {% block content %}
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    </head>
+    <h2>You have been logged out</h2>
+    <div class="border-top pt-3"  style="min-height:65vh;">
+        <small class="text-muted">
+            <a href="{% url 'login' %}">Log In Again</a>
+        </small>
+    </div>
+{% endblock %}
     <h2>You have been logged out</h2>
     <div class="border-top pt-3"  style="min-height:65vh;">
         <small class="text-muted">

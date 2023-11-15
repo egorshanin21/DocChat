@@ -1,32 +1,47 @@
 {% extends 'chat/base.html' %}
+{% load static %}
 {% block title %}Chat List{% endblock %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <div style="display: flex;">
-        <div style="width: 50%; padding-right: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #f0f0f0; padding: 10px;">
-            <h2>Chat List</h2>
-            {% if chats %}
-                <ul>
-                    {% for chat in chats %}
-                        <li>
-                            <a href="{% url 'send_message_id' chat.id %}">{{ chat.title }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No chats available.</p>
-            {% endif %}
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    </head>
+    <div class="container mt-2 text-center">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">History</h2>
+                {% if chats %}
+                    <ul class="list-group">
+                        {% for chat in chats %}
+                            <li class="list-group-item">
+                                <a href="{% url 'send_message_id' chat.id %}">{{ chat.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="lead">No chats available.</p>
+                {% endif %}
+                <a href="/" class="btn btn-secondary btn-block mt-5">Back</a>
+            </div>
         </div>
-        <div style="width: 50%; border: 1px solid #ccc; border-radius: 10px; background-color: #f0f0f0; padding: 10px;">
-            <h2>Docs List</h2>
-            {% if docs %}
-                <ul>
-                    {% for doc in docs %}
-                        <h5>{{ doc.title }}</h5>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No DOCS available.</p>
-            {% endif %}
+    </div>
+
+    <div class="container mt-1 text-center">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Docs:</h2>
+                {% if docs %}
+                    <ul class="list-group">
+                        {% for doc in docs %}
+                            <li class="list-group-item">
+                                <h5>{{ doc.title }}</h5>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="lead">No DOCS available.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endblock %}

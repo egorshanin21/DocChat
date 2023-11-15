@@ -1,48 +1,28 @@
-{#{% extends 'chat/base.html' %}#}
-{#{% block title %}DocChat{% endblock %}#}
-{#{% block content %}#}
-{#    <h1>DocChat</h1>#}
-{#    {% if user.is_authenticated %}#}
-{#        <a href="{% url 'upload_file' %}">Upload</a>#}
-{#        <a href="{% url 'send_message' %}">Create chat</a>#}
-{#        <a href="{% url 'get_chats' %}">Chat list</a>#}
-{#    {% else %}#}
-{#        <h1>Ты не зарегистрирован</h1>#}
-{#    {% endif %}#}
-{#{% endblock %}#}
-
 {% extends 'chat/base.html' %}
+{% load static %}
 {% block title %}DocChat{% endblock %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <style>
-    .btn-darkorange {
-        color: #fff;
-        background-color: #FF8C00;
-        border-color: #FF8C00;
-    }
-
-    .btn-darkorange:hover {
-        background-color: #FFA500;
-        border-color: #FFA500;
-    }
-</style>
-
-    <div class="container text-center">
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+        <style>
+            .button-container {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                height: 100vh; /* 100% висоти вікна браузера */
+            }
+        </style>
+    </head>
+    <div class="container text-center button-container">
         {% if user.is_authenticated %}
-            <div class="d-flex justify-content-center">
-                <a class="btn btn-darkorange btn-lg m-2" href="{% url 'upload_file' %}">Upload</a>
-                <a class="btn btn-darkorange btn-lg m-2" href="{% url 'send_message' %}">Create chat</a>
-                <a class="btn btn-darkorange btn-lg m-2" href="{% url 'get_chats' %}">Chat list</a>
-            </div>
+            <a class="btn btn-darkorange btn-lg m-2" href="{% url 'send_message' %}">Create chat</a>
+            <a class="btn btn-darkorange btn-lg m-2" href="{% url 'upload_file' %}">Upload file</a>
+            <a class="btn btn-darkorange btn-lg m-2" href="{% url 'get_chats' %}">History</a>
+
         {% else %}
-            <h1>Ты не зарегистрирован</h1>
+            <h1></h1>
         {% endif %}
-        <h1>DocChat</h1>
     </div>
 {% endblock %}
-
-
-
-
-
-

@@ -1,13 +1,22 @@
 {% extends 'chat/base.html' %}
+{% load static %}
 {% block title %}Upload DocChat{% endblock %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <div class="container text-center mt-4">
-        <h2>Upload File</h2>
-        <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary btn-lg">Upload</button>
-        </form>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    </head>
+    <div class="container mt-5 text-center">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Upload</h2>
+                <form method="post" enctype="multipart/form-data" action="{% url 'upload_file' %}">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary btn-block mt-5">Upload</button>
+                    <a href="/" class="btn btn-secondary btn-block mt-5">Back</a>
+                </form>
+            </div>
+        </div>
     </div>
 {% endblock %}
-
