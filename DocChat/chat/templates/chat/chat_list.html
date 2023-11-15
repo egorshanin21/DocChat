@@ -1,16 +1,34 @@
 {% extends 'chat/base.html' %}
 {% block title %}Chat List{% endblock %}
 {% block content %}
-    <h2>Chat List</h2>
-    {% if chats %}
-        <ul>
-            {% for chat in chats %}
-                <li>
-                    <a href="{% url 'send_message_id' chat.id %}">{{ chat.title }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No chats available.</p>
-    {% endif %}
+    <div style="display: flex;">
+        <div style="width: 50%; padding-right: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #f0f0f0; padding: 10px;">
+            <h2>Chat List</h2>
+            {% if chats %}
+                <ul>
+                    {% for chat in chats %}
+                        <li>
+                            <a href="{% url 'send_message_id' chat.id %}">{{ chat.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No chats available.</p>
+            {% endif %}
+        </div>
+        <div style="width: 50%; border: 1px solid #ccc; border-radius: 10px; background-color: #f0f0f0; padding: 10px;">
+            <h2>Docs List</h2>
+            {% if docs %}
+                <ul>
+                    {% for doc in docs %}
+                        <h5>{{ doc.title }}</h5>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No DOCS available.</p>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
+
+
