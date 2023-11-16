@@ -17,9 +17,10 @@ header {
 }
 
 .content-section {
-    max-width: 600px;
-    max-height: 750px;
-    margin: 50px auto 5px auto;
+    max-width: 650px;
+    max-height: 850px;
+    min-height: 400px;
+    margin: 80px auto 5px auto;
     background-color: white;
     border: 1px solid #ced4da;
     border-radius: 5px;
@@ -83,8 +84,7 @@ input {
 
 .card {
     width: 500px;
-    height: 360px;
+    height: 400px;
     margin: 0 auto;
     padding: 40px;
 }
-
