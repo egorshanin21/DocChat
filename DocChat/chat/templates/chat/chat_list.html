@@ -6,10 +6,27 @@
     <head>
         <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
     </head>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .card {
+            width: 60%;
+            margin: 10px;
+        }
+
+        .card-title {
+            color: #4B5EB8;
+            font-size: 40px;
+            margin-bottom: 30px;
+        }
+    </style>
     <div class="container mt-2 text-center">
         <div class="card">
             <div class="card-body">
-                <h2 class="card-title">History</h2>
+                <h1 class="card-title">Chat list</h1>
                 {% if chats %}
                     <ul class="list-group">
                         {% for chat in chats %}
@@ -19,17 +36,14 @@
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <p class="lead">No chats available.</p>
+                    <p class="lead">No chats available</p>
                 {% endif %}
-                <a href="/" class="btn btn-secondary btn-block mt-5">Back</a>
             </div>
         </div>
-    </div>
 
-    <div class="container mt-1 text-center">
         <div class="card">
             <div class="card-body">
-                <h2 class="card-title">Docs:</h2>
+                <h1 class="card-title">Docs list</h1>
                 {% if docs %}
                     <ul class="list-group">
                         {% for doc in docs %}
@@ -39,11 +53,9 @@
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <p class="lead">No DOCS available.</p>
+                    <p class="lead">No DOCS available</p>
                 {% endif %}
             </div>
         </div>
     </div>
 {% endblock %}
-
-

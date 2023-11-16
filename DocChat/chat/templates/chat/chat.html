@@ -1,142 +1,166 @@
 {% extends 'chat/base.html' %}
 {% block title %}Chat{% endblock %}
 {% block content %}
-    <style>
-        body {
-            overflow: hidden;
-        }
+<style>
+    body {
+        overflow: hidden;
+        background-image: url('/static/background_chat.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
 
-        .form-header {
-             margin-top: 5px;
-        }
-
-        .chat-container {
-            display: flex;
-            flex-direction: row;
-            min-height: 100vh;
-            overflow-y: auto;
-        }
-
-        .chats-container {
-            border: 1px solid #ccc;
-            padding: 20px;
-            max-width: 400px; /* Ширина контейнера для отображения чатов */
-            max-height: 80vh; /* Высота контейнера для отображения чатов */
-            display: flex;
-            width: 50%;
-            flex-direction: column;
-            border-radius: 10px;
-            margin-right: 68px; /* Добавлен отступ справа для разделения контейнеров */
-            overflow-y: auto;
-            word-wrap: break-word;
-            margin-top: 20px;
+    .form-header {
+        margin-top: 30px;
+        padding: 10px; /* Додайте бажаний відступ від країв */
+        background: #4B5EB8;
+        color: white;
+        border-radius: 10px;
+        text-align: center;
+    }
 
 
-        }
+    .chat-container {
+        display: flex;
+        flex-direction: row;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
 
-        .message-box {
-            border: 1px solid #ccc;
-            padding: 10px;
-            max-width: 1000px;
-            margin: 20px 0;
-            width: 50%;
-            word-wrap: break-word;
-            overflow-y: auto;
-            max-height: 70vh;
-            border-radius: 10px;
-        }
+    .chats-container {
+        border: 1px solid #ccc;
+        padding: 20px;
+        max-width: 280px;
+        max-height: 86vh;
+        display: flex;
+        width: 50%;
+        flex-direction: column;
+        border-radius: 10px;
+        margin-right: 68px;
+        overflow-y: auto;
+        word-wrap: break-word;
+        margin-top: 20px;
+    }
 
-        .message {
-            margin-bottom: 10px;
-        }
+    .message-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        max-width: 1200px;
+        min-width: 780px;
+        margin: 20px 0;
+        width: 50%;
+        word-wrap: break-word;
+        overflow-y: auto;
+        max-height: 70vh;
+        border-radius: 10px;
+    }
 
-        .form-container {
-            text-align: center;
-            margin-top: 20px;
-            position: absolute;
-            bottom: 90px;
-            width: 100%;
-        }
+    .message {
+        margin-bottom: 10px;
+    }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            margin-bottom: -15px;
-        }
+    .form-container {
+        text-align: center;
+        margin-top: 20px;
+        position: absolute;
+        bottom: 90px;
+        width: 100%;
+    }
 
-        textarea {
-            height: 45px;
-            resize: vertical;
-            margin-top: 10px;
-            width: 900px;
-            overflow-y: auto;
-            border-radius: 10px;
-        }
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-bottom: -15px;
+    }
 
-        button {
-            margin-top: 10px;
-            width: 150px;
-            border-radius: 10px;
-            background-color: #05f50f;
-            color: #070707;
-        }
-    </style>
+    textarea {
+        height: 50px;
+        resize: vertical;
+        margin: -52px 0; /* Змініть це значення на власний розсуд */
+        width: 780px;
+        overflow-y: auto;
+        border-radius: 10px;
+    }
 
-    <div class="chat-container">
-        <div class="chats-container">
-            <a href="{% url 'send_message' %}" class="button">Create chat</a>
-            <h2 class="form-header">Chats {{ request.user }} </h2>
-            {% for item in chats %}
-                <div class="message">
-                     <a href="{% url 'send_message_id' chat_id=item.id %}">{{ item.title }}</a><br>
-                </div>
-            {% endfor %}
-        </div>
 
-        <div class="message-box">
-            {% for item in message %}
-                <div class="message">
-                {% if item.answer %}
-                     <h3>Chat<br></h3>{{ item.message }}<br>
-                {% else %}
-                   <h3>{{ item.sender }}<br></h3>{{ item.message }}<br>
-                {% endif %}
-                </div>
-            {% endfor %}
-        </div>
+    button {
+        margin-top: 10px;
+        width: 150px;
+        border-radius: 10px;
+        background-color: #ff6b0a;
+        color: white;
+        padding: 10px;
+        cursor: pointer;
+        border: none;
+    }
 
-        <div class="form-container">
-            <form id="messageForm" method="post" enctype="multipart/form-data" action="">
-                {% csrf_token %}
-                <textarea name="message" id="id_message" required></textarea>
-                <button type="button" onclick="sendMessage()">Send</button>
-            </form>
-        </div>
+    .create-chat-button {
+        margin-top: 10px;
+        width: 150px;
+        border-radius: 10px;
+        background-color: #ff6b0a;
+        color: white;
+        padding: 10px;
+        cursor: pointer;
+        border: none;
+    }
+</style>
+
+<div class="chat-container">
+    <div class="chats-container">
+        <a href="{% url 'send_message' %}" class="create-chat-button btn btn-secondary btn-block">Create chat</a>
+        <h4 class="form-header">Chats list</h4>
+        {% for item in chats %}
+            <div class="message">
+                <a href="{% url 'send_message_id' chat_id=item.id %}">{{ item.title }}</a><br>
+            </div>
+        {% endfor %}
     </div>
 
-    <script>
-        console.log("chat_id:", "{{ chat_id }}");
-        function sendMessage() {
-            var form = document.getElementById("messageForm");
-            var chatIdInput = document.createElement("input");
-            chatIdInput.setAttribute("type", "hidden");
-            chatIdInput.setAttribute("name", "chat_id");
-            chatIdInput.setAttribute("value", "{{ chat_id }}");
-            form.appendChild(chatIdInput);
+    <div class="message-box">
+        {% for item in message %}
+            <div class="message">
+            {% if item.answer %}
+                 <h3>Chat<br></h3>{{ item.message }}<br>
+            {% else %}
+                <h3>{{ item.sender }}<br></h3>{{ item.message }}<br>
+            {% endif %}
+            </div>
+        {% endfor %}
+    </div>
 
-            var actionUrl;
-            if ("{{ chat_id }}" !== "None") {
-                actionUrl = "/send_message/{{ chat_id }}/";
-            } else {
-                actionUrl = "/send_message/";
-            }
+    <div class="form-container">
+        <form id="messageForm" method="post" enctype="multipart/form-data" action="">
+            {% csrf_token %}
+            <textarea name="message" id="id_message" required></textarea>
+            <button type="button" onclick="sendMessage()">Send</button>
+        </form>
+    </div>
+</div>
 
-            form.action = actionUrl;
-            form.submit();
+<script>
+    console.log("chat_id:", "{{ chat_id }}");
+    function sendMessage() {
+        var form = document.getElementById("messageForm");
+        var chatIdInput = document.createElement("input");
+        chatIdInput.setAttribute("type", "hidden");
+        chatIdInput.setAttribute("name", "chat_id");
+        chatIdInput.setAttribute("value", "{{ chat_id }}");
+        form.appendChild(chatIdInput);
+
+        var actionUrl;
+        if ("{{ chat_id }}" !== "None") {
+            actionUrl = "/send_message/{{ chat_id }}/";
+        } else {
+            actionUrl = "/send_message/";
         }
-    </script>
+
+        form.action = actionUrl;
+        form.submit();
+    }
+</script>
 {% endblock %}
 
 
