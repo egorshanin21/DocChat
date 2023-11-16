@@ -1,8 +1,26 @@
 {% extends 'chat/base.html' %}
+{% load static %}
+{% block title %}DeleteUser{% endblock %}
+{% load crispy_forms_tags %}
 {% block content %}
-<h2>Delete user confirm page</h2>
-<form method="post">
-{% csrf_token %}
-<button type="submit" class="btn btn-danger">Delete Account</button>
-</form>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+  </head>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body d-flex flex-column align-items-center">
+            <h2 class="card-title">Delete User Confirmation</h2>
+            <p class="card-text">Are you sure you want to delete your account?</p>
+            <form method="post" class="mt-5">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger mt-auto mr-2">Delete Account</button>
+              <a href="/" class="btn btn-secondary mt-auto">Back</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
