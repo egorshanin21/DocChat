@@ -119,16 +119,57 @@
         {% endfor %}
     </div>
 
-    <div class="message-box">
-        {% for item in message %}
-            <div class="message">
-            {% if item.answer %}
-                 <h3>Chat<br></h3>{{ item.message }}<br>
-            {% else %}
-                <h3>{{ item.sender }}<br></h3>{{ item.message }}<br>
-            {% endif %}
-            </div>
-        {% endfor %}
+        button {
+            margin-top: 10px;
+            width: 150px;
+            border-radius: 10px;
+            background-color: #05f50f;
+            color: #070707;
+        }
+    </style>
+
+    <div class="chat-container">
+        <div class="chats-container">
+            <a href="{% url 'send_message' %}" class="button">Create chat</a>
+            <h2 class="form-header">Chats {{ request.user }} </h2>
+            {% for item in chats %}
+                <div class="message">
+                     <a href="{% url 'send_message_id' chat_id=item.id %}">{{ item.title }}</a><br>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="message-box">
+            {% for item in message %}
+                <div class="message">
+                {% if item.answer %}
+                     <h3>Chat<br></h3>{{ item.message }}<br>
+                {% else %}
+                   <h3>{{ item.sender }}<br></h3>{{ item.message }}<br>
+                {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="form-container">
+            <form id="messageForm" method="post" enctype="multipart/form-data"
+                  action="">
+                {% csrf_token %}
+                <textarea name="message" id="id_message" required></textarea>
+                <button type="submit">Send</button>
+                <script>
+                    document.getElementById("messageForm").addEventListener("submit", function (event) {
+                        var messageContent = document.getElementById("id_message").value.trim();
+
+                        if (messageContent === '') {
+                            event.preventDefault(); // Предотвращаем отправку формы, если поле пустое
+                        } else {
+                            // Добавьте здесь ваш код для отправки формы, если поле не пустое
+                        }
+                    });
+                </script>
+            </form>
+        </div>
     </div>
 
     <div class="form-container">
@@ -162,16 +203,3 @@
     }
 </script>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-

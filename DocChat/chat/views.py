@@ -27,10 +27,28 @@ load_dotenv()
 
 # Create your views here.
 def homepage(request):
+    """
+    Renders the homepage of the chat application.
+
+    Args:
+        request: HttpRequest object
+
+    Returns:
+        Rendered homepage HTML.
+    """
     return render(request, 'chat/home.html')
 
 
 def get_file_text(file):
+    """
+    Extracts text content from uploaded files.
+
+    Args:
+        file: Uploaded file object
+
+    Returns:
+        Extracted text content from the file.
+    """
     text = None
     if file:
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
@@ -57,12 +75,30 @@ def get_file_text(file):
 
 
 def get_text_fragments(text):
+    """
+    Splits text into smaller fragments.
+
+    Args:
+        text: Text content to be split
+
+    Returns:
+        Fragments of the text content.
+    """
     text_separator = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     fragments = text_separator.split_text(text)
     return fragments
 
 
 def get_vector(text_fragments):
+    """
+    Generates a vector representation from text fragments.
+
+    Args:
+        text_fragments: Fragments of text content
+
+    Returns:
+        Vector representation of the text fragments.
+    """
     api_key = os.getenv("OPENAI_API_KEY")
     investments = OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=api_key)
     vector = FAISS.from_texts(text_fragments, investments)
@@ -70,6 +106,15 @@ def get_vector(text_fragments):
 
 
 def get_conversation_fragments(vector):
+    """
+    Constructs conversation fragments using a conversational retrieval chain.
+
+    Args:
+        vector: Vector representation of text fragments.
+
+    Returns:
+        Fragments of conversation constructed based on the provided vector.
+    """
     bot_gpt = ChatOpenAI(model="gpt-3.5-turbo")
     memory = ConversationBufferMemory(memory_key='chat_history',
                                       return_messages=True)
@@ -83,6 +128,16 @@ def get_conversation_fragments(vector):
 
 @login_required
 def upload_file(request):
+    """
+    Handles file uploads by users and saves them in the database.
+
+    Args:
+        request: HttpRequest object
+
+    Returns:
+        If POST request is valid, redirects to the homepage.
+        Otherwise, renders the file upload form.
+    """
     template_name = 'chat/upload_file.html'
     user = request.user
 
@@ -119,13 +174,32 @@ def upload_file(request):
 
 
 def create_chat(request):
+    """
+    Redirects to the homepage.
+
+    Args:
+        request: HttpRequest object
+
+    Returns:
+        Redirects to the homepage view.
+    """
     template_name = 'chat/chat.html'
-    return redirect(
-        'homepage')
+    return redirect('homepage')
 
 
 @login_required
 def send_message(request, chat_id=None):
+    """
+    Handles sending messages within a chat.
+
+    Args:
+        request: HttpRequest object
+        chat_id: Optional chat identifier
+
+    Returns:
+        If POST request is valid, sends a message and redirects to the chat.
+        If GET request, renders the chat view with the message form and chats list.
+    """
     template_name = 'chat/chat.html'
     if request.method == 'POST':
         form = SendMessageForm(request.POST)
@@ -175,6 +249,15 @@ def send_message(request, chat_id=None):
 
 @login_required
 def get_chats(request):
+    """
+    Retrieves the list of chats and associated documents for the current user.
+
+    Args:
+        request: HttpRequest object
+
+    Returns:
+        Renders the chat list view with chats and associated documents.
+    """
     template_name = 'chat/chat_list.html'
     chats = Chat.objects.filter(user=request.user)
     chat_list = [{'id': chat.id, 'title': chat.title} for chat in chats]
@@ -184,9 +267,55 @@ def get_chats(request):
 
 
 def get_messages(chat_id):
+    """
+    Retrieves messages of a specific chat.
+
+    Args:
+        chat_id: Identifier of the chat
+
+    Returns:
+        List of messages in the specified chat, with sender details, message content,
+        timestamps, and an indication if it's an answer or not.
+    """
     chat = get_object_or_404(Chat, id=chat_id)
     messages = Message.objects.filter(chat=chat)
     message_list = [
         {'sender': message.sender.username, 'message': message.message,
          'timestamp': message.timestamp, 'answer': message.answer} for message in messages]
     return message_list
+
+
+@login_required
+def delete_document(request, doc_id):
+    """
+    Deletes a specific document associated with the user.
+
+    Args:
+        request: HttpRequest object
+        doc_id: Identifier of the document to be deleted
+
+    Returns:
+        Redirects to the chat list view after the document deletion.
+    """
+    doc = get_object_or_404(UserFile, id=doc_id, user=request.user)
+    doc.delete()
+    return redirect('get_chats')
+
+
+@login_required
+def delete_chat(request, chat_id):
+    """
+    Deletes a specific chat along with its associated messages.
+
+    Args:
+        request: HttpRequest object
+        chat_id: Identifier of the chat to be deleted
+
+    Returns:
+        Redirects to the chat list view after the chat and associated messages deletion.
+    """
+    chat = get_object_or_404(Chat, id=chat_id, user=request.user)
+    Message.objects.filter(chat=chat).delete()
+    chat.delete()
+    return redirect('get_chats')
+

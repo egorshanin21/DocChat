@@ -5,7 +5,22 @@ from django.utils import timezone
 
 
 class User(AbstractUser):
+    """
+    Custom user model extending Django's AbstractUser.
+
+    Attributes:
+    - email (EmailField): Field to store the unique email address of the user.
+
+    Methods:
+    - __str__(): Method to represent the user object as a string. Returns the username.
+    """
     email = models.EmailField(unique=True)
     
     def __str__(self):
+        """
+        Method to represent the user object as a string.
+
+        Returns:
+        - str: Username.
+        """
         return self.username
