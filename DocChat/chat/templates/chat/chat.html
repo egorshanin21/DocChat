@@ -108,10 +108,22 @@
         </div>
 
         <div class="form-container">
-            <form id="messageForm" method="post" enctype="multipart/form-data" action="">
+            <form id="messageForm" method="post" enctype="multipart/form-data"
+                  action="">
                 {% csrf_token %}
                 <textarea name="message" id="id_message" required></textarea>
-                <button type="button" onclick="sendMessage()">Send</button>
+                <button type="submit">Send</button>
+                <script>
+                    document.getElementById("messageForm").addEventListener("submit", function (event) {
+                        var messageContent = document.getElementById("id_message").value.trim();
+
+                        if (messageContent === '') {
+                            event.preventDefault(); // Предотвращаем отправку формы, если поле пустое
+                        } else {
+                            // Добавьте здесь ваш код для отправки формы, если поле не пустое
+                        }
+                    });
+                </script>
             </form>
         </div>
     </div>
