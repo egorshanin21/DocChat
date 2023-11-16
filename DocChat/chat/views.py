@@ -190,3 +190,19 @@ def get_messages(chat_id):
         {'sender': message.sender.username, 'message': message.message,
          'timestamp': message.timestamp, 'answer': message.answer} for message in messages]
     return message_list
+
+
+@login_required
+def delete_document(request, doc_id):
+    doc = get_object_or_404(UserFile, id=doc_id, user=request.user)
+    doc.delete()
+    return redirect('get_chats')
+
+
+@login_required
+def delete_chat(request, chat_id):
+    chat = get_object_or_404(Chat, id=chat_id, user=request.user)
+    Message.objects.filter(chat=chat).delete()
+    chat.delete()
+    return redirect('get_chats')
+

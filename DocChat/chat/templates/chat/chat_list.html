@@ -3,47 +3,56 @@
 {% block title %}Chat List{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <head>
-        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    </head>
-    <div class="container mt-2 text-center">
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title">History</h2>
-                {% if chats %}
-                    <ul class="list-group">
-                        {% for chat in chats %}
-                            <li class="list-group-item">
-                                <a href="{% url 'send_message_id' chat.id %}">{{ chat.title }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p class="lead">No chats available.</p>
-                {% endif %}
-                <a href="/" class="btn btn-secondary btn-block mt-5">Back</a>
-            </div>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+</head>
+<div class="container mt-2 text-center">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">History</h2>
+            {% if chats %}
+            <ul class="list-group">
+                {% for chat in chats %}
+                <li class="list-group-item">
+                    <a href="{% url 'send_message_id' chat.id %}">{{ chat.title }}</a>
+                </li>
+                <form action="{% url 'delete_chat' chat.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Удалить чат">
+                </form>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="lead">No chats available.</p>
+            {% endif %}
+            <a href="/" class="btn btn-secondary btn-block mt-5">Back</a>
         </div>
     </div>
+</div>
 
-    <div class="container mt-1 text-center">
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title">Docs:</h2>
-                {% if docs %}
-                    <ul class="list-group">
-                        {% for doc in docs %}
-                            <li class="list-group-item">
-                                <h5>{{ doc.title }}</h5>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p class="lead">No DOCS available.</p>
-                {% endif %}
-            </div>
+<div class="container mt-1 text-center">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Docs:</h2>
+            {% if docs %}
+            <ul class="list-group">
+                {% for doc in docs %}
+                <li class="list-group-item">
+                    <h5>{{ doc.title }}</h5>
+                    <form action="{% url 'delete_document' doc.id %}"
+                          method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Удалить документ">
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="lead">No DOCS available.</p>
+            {% endif %}
         </div>
     </div>
+</div>
 {% endblock %}
 
 
