@@ -11,12 +11,14 @@
     }
 
     .form-header {
-        margin-top: 70px;
-        padding: 10px; /* Додайте бажаний відступ від країв */
+        margin-top: 18px;
+        {#padding: 10px; /* Додайте бажаний відступ від країв */#}
         background: #4B5EB8;
         color: white;
-        border-radius: 10px;
+        border-radius: 45px;
         text-align: center;
+        height: 80px;
+        padding-top:26px
     }
 
 
@@ -47,7 +49,7 @@
         padding: 10px;
         max-width: 1200px;
         min-width: 860px;
-        min-height: 80vh;
+        min-height: 82vh;
         margin: 20px 0;
         width: 60%;
         word-wrap: break-word;
@@ -90,7 +92,7 @@
     button {
         margin-top: -30px;
         margin-left: 555px;
-        width: 120px;
+        width: 145px;
         height: 50px;
         border-radius: 10px;
         background-color: #ff6b0a;
@@ -120,11 +122,10 @@
             <h4 class="form-header">Chat list </h4>
             {% for item in chats %}
                 <div class="message">
-                     <a href="{% url 'send_message_id' chat_id=item.id %}">{{ item.title }}</a><br>
+                     <a href="{% url 'send_message_id' chat_id=item.id %}" style="color:  #ff6b0a;">{{ item.title }}</a><br>
                 </div>
             {% endfor %}
         </div>
-
         <div class="message-box" style="position: relative; top: 0px; right: 7px;">
             {% for item in message %}
                 <div class="message">
@@ -144,7 +145,7 @@
                 <div style="position: relative; top: 15px; right: 43px;">
                     <textarea name="message" id="id_message" required></textarea>
                 </div>
-                <div style="position: relative; top: -25px; left: 245px;">
+                <div style="position: relative; top: -25px; left: 233px;">
                     <form action="">
                         <button type="submit">Send</button>
                     </form>
