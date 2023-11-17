@@ -3,60 +3,115 @@
 {% block title %}Chat List{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <head>
-        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    </head>
-    <style>
-        .container {
-            display: flex;
-            justify-content: space-around;
-        }
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+</head>
+<style>
+    .container {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+    }
 
-        .card {
-            width: 60%;
-            margin: 10px;
-        }
+    .card {
+        width: 50%;
+        min-height: 700px;
+        margin: 1px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        overflow: hidden;
+    }
 
-        .card-title {
-            color: #4B5EB8;
-            font-size: 40px;
-            margin-bottom: 30px;
-        }
-    </style>
-    <div class="container mt-2 text-center">
-        <div class="card">
-            <div class="card-body">
-                <h1 class="card-title">Chat list</h1>
-                {% if chats %}
-                    <ul class="list-group">
-                        {% for chat in chats %}
-                            <li class="list-group-item">
-                                <a href="{% url 'send_message_id' chat.id %}">{{ chat.title }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p class="lead">No chats available</p>
-                {% endif %}
-            </div>
+    .card-body {
+        padding: 10px;
+        max-height: 700px;
+        overflow-y: auto;
+    }
+
+    .card-title {
+        color: #4B5EB8;
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .list-group {
+        margin-top: 10px;
+    }
+
+    .list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .list-item:last-child {
+        border-bottom: none;
+    }
+
+    .delete-form {
+        margin-left: 10px;
+    }
+
+    .delete-btn {
+        background-color: #ff6b0a;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .delete-btn:hover {
+        background-color: #c9302c;
+    }
+
+    .lead {
+        font-size: 18px;
+    }
+</style>
+<div class="container mt-2 text-center">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Chat list</h1>
+            {% if chats %}
+                <div class="list-group">
+                    {% for chat in chats %}
+                        <div class="list-item">
+                            <span>{{ chat.title }}</span>
+                            <form action="{% url 'delete_chat' chat.id %}" method="post" class="delete-form">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-btn">Delete</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="lead">No chats available</p>
+            {% endif %}
         </div>
+    </div>
 
-        <div class="card">
-            <div class="card-body">
-                <h1 class="card-title">Docs list</h1>
-                {% if docs %}
-                    <ul class="list-group">
-                        {% for doc in docs %}
-                            <li class="list-group-item">
-                                <h5>{{ doc.title }}</h5>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p class="lead">No DOCS available</p>
-                {% endif %}
-            </div>
-
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Docs list</h1>
+            {% if docs %}
+                <div class="list-group">
+                    {% for doc in docs %}
+                        <div class="list-item">
+                            <span>{{ doc.title }}</span>
+                            <form action="{% url 'delete_document' doc.id %}" method="post" class="delete-form">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-btn">Delete</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="lead">No DOCS available</p>
+            {% endif %}
         </div>
     </div>
 </div>
