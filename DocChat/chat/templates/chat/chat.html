@@ -30,7 +30,7 @@
     .chats-container {
         border: 1px solid #ccc;
         padding: 20px;
-        max-width: 260px;
+        max-width: 330px;
         max-height: 88vh;
         display: flex;
         width: 50%;
@@ -49,7 +49,7 @@
         min-width: 860px;
         min-height: 80vh;
         margin: 20px 0;
-        width: 50%;
+        width: 60%;
         word-wrap: break-word;
         overflow-y: auto;
         max-height: 70vh;
@@ -81,16 +81,16 @@
     textarea {
         height: 50px;
         resize: vertical;
-        margin-top: 20px;
-        width: 780px;
+        margin-top: 30px;
+        width: 950px;
         overflow-y: auto;
         border-radius: 10px;
     }
 
     button {
-        margin-top: -50px;
-        margin-left: 860px;
-        width: 74px;
+        margin-top: -30px;
+        margin-left: 555px;
+        width: 120px;
         height: 50px;
         border-radius: 10px;
         background-color: #ff6b0a;
@@ -125,7 +125,7 @@
             {% endfor %}
         </div>
 
-        <div class="message-box">
+        <div class="message-box" style="position: relative; top: 0px; right: 7px;">
             {% for item in message %}
                 <div class="message">
                 {% if item.answer %}
@@ -141,8 +141,14 @@
             <form id="messageForm" method="post" enctype="multipart/form-data"
                   action="">
                 {% csrf_token %}
-                <textarea name="message" id="id_message" required></textarea>
-                <button type="submit">Send</button>
+                <div style="position: relative; top: 15px; right: 45px;">
+                    <textarea name="message" id="id_message" required></textarea>
+                </div>
+                <div style="position: relative; top: -25px; left: 245px;">
+                    <form action="">
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
                 <script>
                     document.getElementById("messageForm").addEventListener("submit", function (event) {
                         var messageContent = document.getElementById("id_message").value.trim();
