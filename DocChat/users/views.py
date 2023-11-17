@@ -59,7 +59,10 @@ def register(request):
             user.is_active=False
             user.save()
             activateEmail(request, user, form.cleaned_data.get('email'))
-            return redirect('homepage')
+            return render(
+                request=request,
+                template_name="users/message_to_email.html"
+            )
 
         else:
             for error in list(form.errors.values()):
@@ -107,7 +110,10 @@ def custom_login(request):
 def custom_logout(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
-    return redirect("homepage")
+    return render(
+        request=request,
+        template_name="users/logout.html"
+    )
 
 def password_change(request):
     user = request.user
