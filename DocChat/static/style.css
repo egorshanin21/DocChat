@@ -84,7 +84,8 @@ input {
 
 .card {
     width: 500px;
-    height: 400px;
+    height: 450px;
     margin: 0 auto;
-    padding: 40px;
+    padding: 20px;
+    line-height: 10;
 }
