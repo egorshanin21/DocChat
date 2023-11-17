@@ -17,9 +17,9 @@ header {
 }
 
 .content-section {
-    max-width: 650px;
+    max-width: 550px;
     max-height: 850px;
-    min-height: 400px;
+    min-height: 450px;
     margin: 80px auto 5px auto;
     background-color: white;
     border: 1px solid #ced4da;
