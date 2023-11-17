@@ -55,6 +55,7 @@ Command to venv:
 - OpenAI API
 - HTML
 - CSS
+- JavaScript
 - Docker
 - Github
 
