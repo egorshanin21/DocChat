@@ -6,7 +6,7 @@ authors = ["egorshanin21 <egorshanin21@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.11.5"
 django = "^4.2.7"
 django-environ = "^0.11.2"
 psycopg2-binary = "^2.9.9"

@@ -208,7 +208,7 @@ def upload_file(request):
             user_file.save()
             return redirect('homepage')
     else:
-        print("GET")
+        print("GET method")
         form = UserFileForm()
     return render(request, template_name, {'form': form})
 
