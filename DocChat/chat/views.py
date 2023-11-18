@@ -185,18 +185,23 @@ def upload_file(request):
             _, file_extension = os.path.splitext(pdf_document.name)
             if file_extension.lower() not in [".pdf", ".txt", ".docx",
                                               ".pptx"]:
-                return JsonResponse(
-                    {'error': 'Only PDF, TXT, DOCX, PPTX files'}, status=400)
+                return render(
+                    request=request,
+                    template_name="chat/error_format.html"
+                )
 
             if pdf_document.size > 50 * 1024 * 1024:
-                return JsonResponse({'error': "File size exceeds 50 MB."},
-                                    status=400)
+                return render(
+                    request=request,
+                    template_name="chat/error_size_file.html"
+                )
 
             if UserFile.objects.filter(user=user,
                                        title=pdf_document.name).exists():
-                return JsonResponse(
-                    {'error': 'A file with the same name already exists.'},
-                    status=400)
+                return render(
+                    request=request,
+                    template_name="chat/error_filename.html"
+                )
 
             user_file = UserFile(user=user, title=pdf_document.name)
             user_file.content = get_file_text(pdf_document)

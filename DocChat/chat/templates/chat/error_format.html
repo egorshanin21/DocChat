@@ -1,0 +1,19 @@
+{% extends 'chat/base.html' %}
+{% load static %}
+{% block title %}Message{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+</head>
+<div class="content-section">
+    <form class="content-form" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form|crispy }}
+        </div>
+        <h4 class="mt-40 mb-3">Please upload files only in PDF, TXT, DOCX, PPTX format</h4>
+        <a href="/" class="btn btn-secondary my-3">Ok</a>
+    </form>
+</div>
+{% endblock %}
