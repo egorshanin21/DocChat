@@ -26,6 +26,9 @@ setuptools = "~=59.5.0"
 python-dotenv = "*"
 gunicorn = "^21.2.0"
 environ = "^1.0"
+pypdf2 = "^3.0.1"
+docx2txt = "^0.8"
+python-pptx = "^0.6.23"
 
 
 [build-system]
