@@ -15,7 +15,7 @@
 
 #### Command: [git clone git@github.com:egorshanin21/DocChat.git]()
 
-2. Navigate to the project directory cd DocChat
+2. Navigate to the project directory `cd DocChat`
 
 #### Command: cd DocChat
 
@@ -46,6 +46,13 @@ Command to venv:
 9. Run the program `python manage.py runserver`
 
 10. Follow the link http://127.0.0.1:8000/ and enjoy!
+
+# **How to install using Docker:**
+
+1. Go to the directory at the Dockerfile level;
+2. Run the command `docker build -t docchat-app`;
+3. After successfully building the container, run the command `docker run -p 8000:8000 docchat-app`;
+4. Follow the link http://127.0.0.1:8000/.
 
 # Used technologies:
 - Python 3.11.5
