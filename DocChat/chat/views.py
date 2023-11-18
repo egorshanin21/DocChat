@@ -206,8 +206,7 @@ def upload_file(request):
             user_file = UserFile(user=user, title=pdf_document.name)
             user_file.content = get_file_text(pdf_document)
             user_file.save()
-            return redirect(
-                'homepage')
+            return redirect('homepage')
     else:
         print("GET")
         form = UserFileForm()

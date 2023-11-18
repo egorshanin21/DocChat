@@ -44,6 +44,7 @@
         align-items: center;
         padding: 10px;
         border-bottom: 1px solid #eee;
+        height: 80px;
     }
 
     .list-item:last-child {
@@ -62,6 +63,8 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        height: 41px; /* Уменьшаем высоту кнопки */
+        line-height: 27px;
     }
 
     .delete-btn:hover {
@@ -80,7 +83,9 @@
                 <div class="list-group">
                     {% for chat in chats %}
                         <div class="list-item">
-                            <span>{{ chat.title }}</span>
+                            <div class="message">
+                                <a href="{% url 'send_message_id' chat_id=chat.id %}">{{ chat.title }}</a><br>
+                            </div>
                             <form action="{% url 'delete_chat' chat.id %}" method="post" class="delete-form">
                                 {% csrf_token %}
                                 <button type="submit" class="delete-btn">Delete</button>
