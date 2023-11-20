@@ -68,6 +68,6 @@ Command to venv:
 
 # Developers:
 #### 1. Yehor Shanin
-#### 2. Vitaliy Kirienko
+#### 2. Vitalii Kiriienko
 #### 3. Konstantyn Zagorodnui
 #### 4. Ruslan Sirenko
